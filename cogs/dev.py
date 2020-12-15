@@ -5,7 +5,7 @@ import io
 from io import BytesIO
 from discord.ext import commands
 
-class Dev(commands.Cog):
+class Develepor(commands.Cog):
 	
 	def __init__(self, bot):
 		self.bot = bot
@@ -37,4 +37,4 @@ class Dev(commands.Cog):
 	    await ctx.send(f"{days}d, {hours}h, {minutes}m")
 	    	   		   		   	
 def setup(bot):
-	bot.add_cog(Dev(bot))
+	bot.add_cog(Develepor(bot))
