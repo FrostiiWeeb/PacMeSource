@@ -103,6 +103,12 @@ async def prefix(ctx, new_prefix):
 	        	description = f"Hey {ctx.author.name}! I see you changed the prefix to {new_prefix}."
 	        	)
 	        	await ctx.send(embed=embed)
+	        	
+@bot.command(aliases=["src"])
+async def source(ctx):
+	embed = discord.Embed(colour = discord.Colour.blurple(), title = "Heres the source!", description="[Here!](https://github.com/FrostiiWeeb/PacMeSource/)")
+	embed.add_field(name="Leave a star, if u use my code!", value="Enjoy!")
+	await ctx.send(embed=embed)
 
 os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
 
