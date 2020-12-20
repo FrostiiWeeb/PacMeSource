@@ -28,16 +28,14 @@ from discord.ext import commands, tasks
 from pretty_help import PrettyHelp
 from itertools import cycle
 
-with open("prefixes.json") as f:
-    prefixes = json.load(f)
-default_prefix = "!*"
+def get_prefix(bot, message):
+    with open("./prefixes.json", "r") as f:
+        prefixes = json.load(f)
 
-def prefix(bot, message):
-    id = message.guild.id
-    return prefixes.get(id, default_prefix)
+    return prefixes[str(message.guild.id)]
 
 color = discord.Colour.green()
-bot = commands.Bot(command_prefix = prefix, fetch_offline_members = True, case_insensitive=True, help_command=PrettyHelp(no_category="Config", color=color, hidden=['cogs.onguildjoin', 'cogs.commanderror', 'cogs.error']), intents=discord.Intents.all())
+bot = commands.Bot(command_prefix = get_prefix, fetch_offline_members = True, case_insensitive=True, help_command=PrettyHelp(no_category="Default Category", color=color, hidden=['cogs.onguildjoin', 'cogs.commanderror', 'cogs.error']), intents=discord.Intents.all())
 bot.launch_time = datetime.utcnow()
 
 status = cycle(['Commands: !*help', f'{len(bot.guilds)} servers! | !*help', 'PacMan'])		
@@ -60,7 +58,8 @@ async def on_ready():
     print ('                                            My prefix is:')
     print (f'                                            !*')
     print('')
-    print('')
+    print('                                            Version:')
+    print(f"                                             {discord.__version__}")
     print ('                              ================================================')
     class colors:
     	default = 0
@@ -90,19 +89,6 @@ async def on_ready():
 @tasks.loop(seconds=10)
 async def change_status():
 	  await bot.change_presence(activity=discord.Game(next(status)))
-
-@bot.command()
-@commands.has_permissions(administrator=True)
-async def prefix(ctx, new_prefix):
-	    prefixes[ctx.message.guild.id] = new_prefix
-	    with open("prefixes.json", "w") as f:
-	        	json.dump(prefixes, f)
-	        	embed = discord.Embed(
-	        	colour = discord.Colour.blurple(),
-	        	title = " ",
-	        	description = f"Hey {ctx.author.name}! I see you changed the prefix to {new_prefix}."
-	        	)
-	        	await ctx.send(embed=embed)
 	        	
 @bot.command(aliases=["src"])
 async def source(ctx):
