@@ -24,14 +24,9 @@ import dotenv
 from dotenv import load_dotenv
 from discord import Activity, ActivityType
 from discord import Member
-from discord.ext import commands
+from discord.ext import commands, tasks
 from pretty_help import PrettyHelp
-
-intents = discord.Intents.default()
-
-intents.members = True
-
-
+from itertools import cycle
 
 with open("prefixes.json") as f:
     prefixes = json.load(f)
@@ -41,22 +36,15 @@ def prefix(bot, message):
     id = message.guild.id
     return prefixes.get(id, default_prefix)
 
-color = discord.Color.red()
-bot = commands.Bot(command_prefix = prefix, intents = intents, fetch_offline_members = True, case_insensitive=True, help_command=PrettyHelp(color=color, active=30))
+color = discord.Colour.green()
+bot = commands.Bot(command_prefix = prefix, fetch_offline_members = True, case_insensitive=True, help_command=PrettyHelp(no_category="Config", color=color, hidden=['cogs.onguildjoin', 'cogs.commanderror', 'cogs.error']), intents=discord.Intents.all())
 bot.launch_time = datetime.utcnow()
 
-async def status():
-	while True:
-		await bot.wait_until_ready()
-		await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f"{len(bot.guilds)} servers | !*help."))
-		await sleep(5)
-		await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="Commands: !*help"))
-		await sleep(5)
-		await bot.change_presence(activity=discord.Game(name="On discord.py!"))
-		await sleep(5)
-		await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f"PacMan"))		
+status = cycle(['Commands: !*help', f'{len(bot.guilds)} servers! | !*help', 'PacMan'])		
 @bot.event
 async def on_ready():
+    await bot.wait_until_ready()
+    change_status.start()
     print ('                              ================================================')
     print ('                                            Bot is now online!')
     print ('')
@@ -74,7 +62,6 @@ async def on_ready():
     print('')
     print('')
     print ('                              ================================================')
-    bot.loop.create_task(status())
     class colors:
     	default = 0
     teal = 0x1abc9c
@@ -100,9 +87,13 @@ async def on_ready():
     blurple = 0x7289da
     greyple = 0x99aab5
 
+@tasks.loop(seconds=10)
+async def change_status():
+	  await bot.change_presence(activity=discord.Game(next(status)))
+
 @bot.command()
 @commands.has_permissions(administrator=True)
-async def prefix(ctx, new_prefix=''):
+async def prefix(ctx, new_prefix):
 	    prefixes[ctx.message.guild.id] = new_prefix
 	    with open("prefixes.json", "w") as f:
 	        	json.dump(prefixes, f)
@@ -127,5 +118,5 @@ for filename in os.listdir('./cogs'):
 
     
 load_dotenv()
-token = os.getenv('DISCORD_TOKEN')            
+token = os.getenv('DISCORD_TOKEN')      
 bot.run(token)
