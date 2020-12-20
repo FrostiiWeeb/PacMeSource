@@ -2,6 +2,9 @@ import discord
 import os
 import aiohttp
 import io
+import time
+import datetime 
+from datetime import datetime
 from io import BytesIO
 from discord.ext import commands
 
