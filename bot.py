@@ -28,11 +28,13 @@ from discord.ext import commands, tasks
 from pretty_help import PrettyHelp
 from itertools import cycle
 
-def get_prefix(bot, message):
-    with open("./prefixes.json", "r") as f:
-        prefixes = json.load(f)
+default_prefix = "!*"
 
-    return prefixes[str(message.guild.id)]
+def get_prefix(bot, ctx):
+	with open('prefixes.json', 'r') as f:
+		prefixes = json.load(f)
+		
+	return prefixes.get(str(ctx.guild.id), default_prefix)
 
 color = discord.Colour.green()
 bot = commands.Bot(command_prefix = get_prefix, fetch_offline_members = True, case_insensitive=True, help_command=PrettyHelp(no_category="Default Category", color=color, hidden=['cogs.onguildjoin', 'cogs.commanderror', 'cogs.error']), intents=discord.Intents.all())
