@@ -37,19 +37,7 @@ class OnGuildJoin(commands.Cog):
 	    embed = discord.Embed(title='PacMe', color=discord.Colour.blurple())
 	    embed.add_field(name="What's up everyone? I am **PacMe**.", value='\nTry typing `!*help` to get started.', inline=False)
 	    embed.set_footer(text='Thanks for adding PacMe to your server!')
-	    await guild.system_channel.send(embed=embed)
-	    
-	@commands.Cog.listener()
-	async def on_guild_leave(self, ctx, guild):
-	  with open('prefixes.json', 'r') as f:
-	  	prefixes = json.load(f)
-	  	print(prefixes)
-	  
-	  del prefixes[ctx.message.guild.id]
-	  print(prefixes)
-	
-	  with open('prefixes.json', 'w') as f:
-	     	    	    json.dump(prefixes, f)	    
+	    await guild.system_channel.send(embed=embed)    
 	    	    	    
 def setup(bot):
 	bot.add_cog(OnGuildJoin(bot))	
