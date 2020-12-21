@@ -14,6 +14,7 @@ class Config(commands.Cog, name="Configuration"):
 			print(f"{self.__class__.__name__} Cog has been loaded\n-----")
 			
 		@commands.command()
+		@commands.check_any((commands.is_owner()) or administrator==True)
 		async def prefix(self, ctx, new_prefix):
 		          with open("./prefixes.json", "r") as f:
 		          	prefixes = json.load(f)
@@ -29,25 +30,15 @@ class Config(commands.Cog, name="Configuration"):
 		          		timestamp=ctx.message.created_at
 		          		)
 		          		embed.add_field(name="New Prefix:", value=f"{new_prefix}", inline=True)
-		          		embed.add_field(name="Example", value=f"{new_prefix}help", inline=True)
+		          		embed.add_field(name="Example:", value=f"{new_prefix}help", inline=True)
 		          		await ctx.send(embed=embed)
-		          		
-		          		
-		@commands.Cog.listener()
-		async def on_guild_join(self, guild):
-		       with open("./prefixes.json", "r") as f:
-		       	prefixes = json.load(f)
-		       	prefixes[str(guild.id)] = "!*"
-		       	
-		       	with open("./prefixes.json", "w") as f:
-		       		json.dump(prefixes, f, indent=4)
 
 		@commands.Cog.listener()
-		async def on_guild_remove(self, guild):
+		async def on_guild_remove(self, ctx):
 		    with open("./prefixes.json", "r") as f:
 		    	prefixes = json.load(f)
 		    	
-		    	prefixes.pop(str(guild.id))
+		    	prefixes.pop(str(ctx.guild.id))
 		    	
 		    	with open("./prefixes.json", "w") as f:
 		    					json.dump(prefixes, f, indent=4)			
