@@ -46,6 +46,14 @@ class Error(commands.Cog):
 	    	)	
 	    	er.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)	
 	    	await ctx.send(embed=er) 
+	    if isinstance(error, commands.NSFWChannelRequired):
+	    	er = discord.Embed(
+	    	colour = discord.Colour.red(),
+	    	title = "Error",
+	    	description = ":x:**{ctx.command} Is required to be invoked in a NSFW channel."
+	    	)
+	    	er.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
+	    	await ctx.send(embed=er)
 
 def setup(bot):
     bot.add_cog(Error(bot))
