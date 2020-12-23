@@ -31,7 +31,7 @@ from itertools import cycle
 default_prefix = "!*"
 
 def get_prefix(bot, ctx):
-	with open('prefixes.json', 'r') as f:
+	with open('./prefixes.json', 'r') as f:
 		prefixes = json.load(f)
 		
 	return prefixes.get(str(ctx.guild.id), default_prefix)
@@ -39,6 +39,8 @@ def get_prefix(bot, ctx):
 color = discord.Colour.green()
 bot = commands.Bot(command_prefix = get_prefix, fetch_offline_members = True, case_insensitive=True, help_command=PrettyHelp(no_category="Default Category", color=color, hidden=['cogs.onguildjoin', 'cogs.commanderror', 'cogs.error']), intents=discord.Intents.all())
 bot.launch_time = datetime.utcnow()
+
+bot.owner_ids = {746807014658801704, 668906205799907348}
 
 status = cycle(['Commands: !*help', f'{len(bot.guilds)} servers! | !*help', 'PacMan'])		
 @bot.event
