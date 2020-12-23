@@ -17,24 +17,35 @@ class Error(commands.Cog):
 	    if isinstance(error, commands.MissingRequiredArgument):
 	    	er = discord.Embed(
 	    	colour = discord.Colour.red(),
-	    	title = "Error!",
-	    	description = f"Missing Argument! Fix that or you'll never get to run {ctx.command}!"
+	    	title = "Error",
+	    	description = f":x:**Missing required argument(s).**"
 	    	)
+	    	er.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
 	    	await ctx.send(embed=er)
 	    if isinstance(error, commands.MissingPermissions):
 	    	er = discord.Embed(
 	    	colour = discord.Colour.red(),
-	    	title = "Error!",
-	    	description = f"Missing Permissions, you can't run {ctx.command}!"
+	    	title = "Error",
+	    	description = f":x:**Missing permission(s).**"
 	    	)
+	    	er.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
 	    	await ctx.send(embed=er)
 	    if isinstance(error, commands.CommandNotFound):
 	    	er = discord.Embed(
 	    	colour = discord.Colour.red(),
-	    	title = "Error!",
-	    	description = f"That isn't a valid command!"
+	    	title = "Error",
+	    	description = f":x:**The command you provided is invalid.**"
 	    	)
-	    	await ctx.send(embed=er)	    		 
+	    	er.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
+	    	await ctx.send(embed=er)	  
+	    if isinstance(error, commands.NotOwner):
+	    	er = discord.Embed(
+	    	colour = discord.Colour.red(),
+	    	title = "Error",
+	    	description = ":x:**You don't own this bot.**"
+	    	)	
+	    	er.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)	
+	    	await ctx.send(embed=er) 
 
 def setup(bot):
     bot.add_cog(Error(bot))
