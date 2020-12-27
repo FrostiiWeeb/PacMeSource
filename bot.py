@@ -20,7 +20,7 @@ import contextlib
 import inspect
 from datetime import datetime
 import aiohttp
-import dotenv 
+import dotenv
 from dotenv import load_dotenv
 from discord import Activity, ActivityType
 from discord import Member
@@ -31,10 +31,10 @@ from itertools import cycle
 default_prefix = "!*"
 
 def get_prefix(bot, ctx):
-	with open('./prefixes.json', 'r') as f:
-		prefixes = json.load(f)
-		
-	return prefixes.get(str(ctx.guild.id), default_prefix)
+    with open('./prefixes.json', 'r') as f:
+        prefixes = json.load(f)
+
+    return prefixes.get(str(ctx.guild.id), default_prefix)
 
 color = discord.Colour.green()
 bot = commands.Bot(command_prefix = get_prefix, fetch_offline_members = True, case_insensitive=True, help_command=PrettyHelp(no_category="Default Category", color=color, hidden=['cogs.onguildjoin', 'cogs.commanderror', 'cogs.error']), intents=discord.Intents.all())
@@ -42,7 +42,7 @@ bot.launch_time = datetime.utcnow()
 
 bot.owner_ids = {746807014658801704, 668906205799907348}
 
-status = cycle(['Commands: !*help', f'{len(bot.guilds)} servers! | !*help', 'PacMan'])		
+status = cycle(['Commands: !*help', f'{len(bot.guilds)} servers! | !*help', 'PacMan'])
 @bot.event
 async def on_ready():
     await bot.wait_until_ready()
@@ -66,7 +66,7 @@ async def on_ready():
     print(f"                                             {discord.__version__}")
     print ('                              ================================================')
     class colors:
-    	default = 0
+        default = 0
     teal = 0x1abc9c
     dark_teal = 0x11806a
     green = 0x2ecc71
@@ -92,27 +92,27 @@ async def on_ready():
 
 @tasks.loop(seconds=10)
 async def change_status():
-	  await bot.change_presence(activity=discord.Game(next(status)))
-	        	
+      await bot.change_presence(activity=discord.Game(next(status)))
+
 @bot.command(aliases=["src"])
 async def source(ctx):
-	embed = discord.Embed(colour = discord.Colour.blurple(), title = "Heres the source!", description="[Here!](https://github.com/FrostiiWeeb/PacMeSource/)")
-	embed.add_field(name="Leave a star, if u use my code!", value="Enjoy!")
-	await ctx.send(embed=embed)
+    embed = discord.Embed(colour = discord.Colour.blurple(), title = "Heres the source!", description="[Here!](https://github.com/FrostiiWeeb/PacMeSource/)")
+    embed.add_field(name="Leave a star, if u use my code!", value="Enjoy!")
+    await ctx.send(embed=embed)
 
 os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
 
-os.environ["JISHAKU_NO_DM_TRACEBACK"] = "True" 
+os.environ["JISHAKU_NO_DM_TRACEBACK"] = "True"
 os.environ["JISHAKU_HIDE"] = "True"
-        	    						    						
-        	    						     						
-bot.load_extension('jishaku')   	    	    
-	   	                                 
+
+
+bot.load_extension('jishaku')
+
 for filename in os.listdir('./cogs'):
   if filename.endswith('.py') and not filename.startswith('_'):
     bot.load_extension(f'cogs.{filename[:-3]}')
 
-    
+
 load_dotenv()
-token = os.getenv('DISCORD_TOKEN')      
+token = os.getenv('DISCORD_TOKEN')
 bot.run(token)
