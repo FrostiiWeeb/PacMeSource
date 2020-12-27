@@ -3,7 +3,6 @@ from discord.ext import commands
 
 
 class OnGuildJoin(commands.Cog):
-
     def __init__(self, bot):
         self.bot = bot
 
@@ -17,6 +16,7 @@ class OnGuildJoin(commands.Cog):
         embed.add_field(name="What's up everyone? I am **PacMe**.", value='\nTry typing `!*help` to get started.', inline=False)
         embed.set_footer(text='Thanks for adding PacMe to your server!')
         await guild.system_channel.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(OnGuildJoin(bot))

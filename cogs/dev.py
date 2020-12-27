@@ -20,16 +20,16 @@ class Develepor(commands.Cog):
     @commands.command(aliases = ["ss"])
     @commands.is_owner()
     async def screenshot(self, ctx, url):
-            start = time.perf_counter()
+        start = time.perf_counter()
 
-            embed = discord.Embed(title = f"Screenshot of {url}", color = discord.Color.from_rgb(48,162,242))
-            async with aiohttp.botSession() as cs:
-                async with cs.get(f'https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{url}') as r:
-                    res = await r.read()
-                    embed.set_image(url="attachment://pp.png")
-                    end = time.perf_counter()
-                    embed.set_footer(text = f"Image fetched in {round((end - start) * 1000)} ms")
-                    await ctx.send(file=discord.File(io.BytesIO(res), filename="screenshot.png"), embed=embed)
+        embed = discord.Embed(title = f"Screenshot of {url}", color = discord.Color.from_rgb(48,162,242))
+        async with aiohttp.botSession() as cs:
+            async with cs.get(f'https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{url}') as r:
+                res = await r.read()
+                embed.set_image(url="attachment://pp.png")
+                end = time.perf_counter()
+                embed.set_footer(text = f"Image fetched in {round((end - start) * 1000)} ms")
+                await ctx.send(file=discord.File(io.BytesIO(res), filename="screenshot.png"), embed=embed)
 
     @commands.command(aliases=['ut'])
     async def uptime(self, ctx):
