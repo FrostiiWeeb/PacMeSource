@@ -1,8 +1,7 @@
 import discord
 from discord.ext import commands
-import datetime
-from datetime import datetime
 import json
+
 
 class Config(commands.Cog, name="Configuration"):
 

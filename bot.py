@@ -1,32 +1,12 @@
-import discord
-from discord.utils import get
-import asyncio
-from asyncio import sleep
-from asyncio import gather
-import random
-import datetime
-import platform
-from discord.ext.commands import ConversionError
 import json
-from json import dump, load
 import os
-from discord import Member
-import time
-import io
-import sqlite3
-import sys
-from io import BytesIO
-import contextlib
-import inspect
 from datetime import datetime
-import aiohttp
-import dotenv
-from dotenv import load_dotenv
-from discord import Activity, ActivityType
-from discord import Member
-from discord.ext import commands, tasks
-from pretty_help import PrettyHelp
 from itertools import cycle
+
+import discord
+from discord.ext import commands, tasks
+from dotenv import load_dotenv
+from pretty_help import PrettyHelp
 
 default_prefix = "!*"
 

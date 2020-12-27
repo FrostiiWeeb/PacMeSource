@@ -1,7 +1,4 @@
 import discord
-import asyncio
-import json
-import traceback
 from discord.ext import commands
 
 
