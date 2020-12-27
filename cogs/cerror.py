@@ -10,7 +10,8 @@ class Error(commands.Cog):
         self.bot = bot
 
         self.errors = {
-            commands.MissingRequiredArgument: "Missing required argument(s).",
+            commands.MissingRequiredArgument: "Missing required argument(s): "
+                                              "{error.param}",
             commands.MissingPermissions: "Missing permission(s).",
             commands.CommandNotFound: "The command you provided is invalid.",
             commands.NotOwner: "You don't own this bot.",
@@ -28,7 +29,7 @@ class Error(commands.Cog):
         description: str = None
 
         if isinstance(error, self.errors.keys()):
-            description = self.errors[error]
+            description = str.format(self.errors[error], ctx=ctx, error=error)
         else:
             formatted = traceback.format_exception(
                 type(error),
