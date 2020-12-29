@@ -16,8 +16,9 @@ class Error(commands.Cog):
             commands.CommandNotFound: "The command you provided is invalid.",
             commands.NotOwner: "You don't own this bot.",
             commands.NSFWChannelRequired: "{ctx.command} Is required to be "
-                                          "invoked in a NSFW channel."
-            commands.MaxConcurrencyReached: "{ctx.command} Is already being used, please wait."
+                                          "invoked in a NSFW channel.",
+            commands.MaxConcurrencyReached: "{ctx.command} Is already being "
+                                            "used, please wait."
         }
 
     @commands.Cog.listener()
@@ -29,8 +30,10 @@ class Error(commands.Cog):
         error = getattr(error, "original", error)
         description: str = None
 
-        if isinstance(error, self.errors.keys()):
-            description = str.format(self.errors[error], ctx=ctx, error=error)
+        if isinstance(error, tuple(self.errors.keys())):
+            description = str.format(self.errors[type(error)],
+                                     ctx=ctx,
+                                     error=error)
         else:
             formatted = traceback.format_exception(
                 type(error),
