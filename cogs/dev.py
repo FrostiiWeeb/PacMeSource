@@ -1,5 +1,4 @@
 import io
-import os
 import time
 from datetime import datetime
 
@@ -9,27 +8,38 @@ from discord.ext import commands
 
 
 class Developer(commands.Cog):
-
     def __init__(self, bot):
         self.bot = bot
+
+        self.screenshot_api = (
+            "https://image.thum.io/get/"
+            "width/1920/crop/675/maxAge/1/noanimate/{url}"
+        )
 
     @commands.Cog.listener()
     async def on_ready(self):
         print(f"{self.__class__.__name__} Cog has been loaded\n-----")
 
-    @commands.command(aliases = ["ss"])
+    @commands.command(aliases=["ss"])
     @commands.is_owner()
     async def screenshot(self, ctx, url):
+        api_url = self.screenshot_api.format(url=url)
         start = time.perf_counter()
 
-        embed = discord.Embed(title = f"Screenshot of {url}", color = discord.Color.from_rgb(48,162,242))
         async with aiohttp.ClientSession() as cs:
-            async with cs.get(f'https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{url}') as r:
+            async with cs.get(api_url) as r:
                 res = await r.read()
-                embed.set_image(url="attachment://pp.png")
                 end = time.perf_counter()
-                embed.set_footer(text = f"Image fetched in {round((end - start) * 1000)} ms")
-                await ctx.send(file=discord.File(io.BytesIO(res), filename="screenshot.png"), embed=embed)
+                ping = round((end - start) * 1000)
+                file = discord.File(io.BytesIO(res), filename="screenshot.png")
+                embed = discord.Embed(
+                    title=f"Screenshot of {url}",
+                    color=discord.Color.from_rgb(48, 162, 242)
+                )
+                embed.set_image(url="attachment://screenshot.png")
+                embed.set_footer(text=f"Image fetched in {ping} ms")
+
+                await ctx.send(file=file, embed=embed)
 
     @commands.command(aliases=['ut'])
     async def uptime(self, ctx):
@@ -38,6 +48,7 @@ class Developer(commands.Cog):
         minutes, seconds = divmod(remainder, 60)
         days, hours = divmod(hours, 24)
         await ctx.send(f"{days}d, {hours}h, {minutes}m")
+
 
 def setup(bot):
     bot.add_cog(Developer(bot))
