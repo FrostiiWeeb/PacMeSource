@@ -46,7 +46,6 @@ class Colors:
     greyple = 0x99aab5
 
 
-color = discord.Colour.green()
 bot = commands.Bot(command_prefix=get_prefix,
                    fetch_offline_members=True,
                    case_insensitive=True,
