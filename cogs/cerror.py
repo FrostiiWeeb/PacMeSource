@@ -17,6 +17,7 @@ class Error(commands.Cog):
             commands.NotOwner: "You don't own this bot.",
             commands.NSFWChannelRequired: "{ctx.command} Is required to be "
                                           "invoked in a NSFW channel."
+            commands.MaxConcurrencyReached: "{ctx.command} Is already being used, please wait."
         }
 
     @commands.Cog.listener()
