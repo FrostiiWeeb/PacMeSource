@@ -1,11 +1,12 @@
-import discord
-import asyncio
 import requests
+
+# import aiohttp
+import discord
 from discord.ext import commands
 
 
 class Covid(commands.Cog):
-    
+
     def __init__(self, bot):
         self.bot = bot
 
