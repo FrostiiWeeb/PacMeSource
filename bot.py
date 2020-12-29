@@ -11,56 +11,17 @@ default_prefix = "!*"
 
 f = "./prefixes.json"
 mr = 'r'
-mw = 'w'
+
 
 def get_prefix(bot, ctx):
-	with open(f, mr) as fl:
-		prefixes = json.load(fl)
-		
-	return prefixes.get(str(ctx.guild.id), default_prefix)
+    with open(f, mr) as fl:
+        prefixes = json.load(fl)
 
-color = discord.Colour.green()
-bot = commands.Bot(command_prefix = get_prefix, fetch_offline_members = True, case_insensitive=True, intents=discord.Intents.all())
-bot.remove_command('help')
-bot.launch_time = datetime.utcnow()
+    return prefixes.get(str(ctx.guild.id), default_prefix)
 
-bot.owner_ids = {746807014658801704, 668906205799907348}
 
-bot.version = "1.1.0"
-
-bot.colour = discord.Colour.red()
-
-status = cycle(['Commands: !*help', f'{len(bot.guilds)} servers! | !*help', 'PacMan'])		
-@bot.event
-async def on_ready():
-    await bot.wait_until_ready()
-    change_status.start()
-    print ('                              ================================================')
-    print ('                                            Bot is now online!')
-    print ('')
-    print ('                                            Logged in as:')
-    print ('                                            {0.user}'.format(bot))
-    print('')
-    print ('                                            ID:')
-    print (f'                                            {bot.user.id}')
-    print ('')
-    print ('                                            Working on:')
-    print (f'                                            {len(bot.guilds)} servers!')
-    print('')
-    print ('                                            My prefix is:')
-    print (f'                                            !*')
-    print('')
-    print('                                            Version:')
-    print(f"                                             {discord.__version__}")
-    print ('                              ================================================')  
-    log_channel = bot.get_channel(789892435190349859)
-    embed = discord.Embed(
-    colour = discord.Colour.blurple(),
-    title = f"{bot.user.name} Is online!")
-    embed.set_footer(text="Howdy' how ya'll doin'?", icon_url=bot.user.avatar_url)
-    await log_channel.send(embed=embed)
-    class colors:
-    	default = 0
+class Colors:
+    default = 0
     teal = 0x1abc9c
     dark_teal = 0x11806a
     green = 0x2ecc71
@@ -84,52 +45,135 @@ async def on_ready():
     blurple = 0x7289da
     greyple = 0x99aab5
 
-@tasks.loop(seconds=10)
+
+bot = commands.Bot(command_prefix=get_prefix,
+                   fetch_offline_members=True,
+                   case_insensitive=True,
+                   intents=discord.Intents.all())
+bot.remove_command('help')
+bot.launch_time = datetime.utcnow()
+
+bot.owner_ids = {746807014658801704, 668906205799907348}
+
+bot.version = "1.1.0"
+
+bot.colour = discord.Colour.red()
+
+bot.colors = Colors
+bot.colours = bot.colors
+
+activities = cycle(["Commands: !*help",
+                    "{length} servers! | !*help",
+                    "PacMan"])
+display_messages = (
+    ("Bot is now online!", ""),
+    ("Logged in as:", "{bot.user}"),
+    ("ID:", "{bot.user.id}"),
+    ("Working on:", "{length} servers!"),
+    ("My prefix is:", default_prefix),
+    ("Version:", discord.__version__)
+)
+
+
+async def handle_display():
+    await bot.wait_until_ready()
+    # DEV: there were 30 spaces originally
+    width, _ = os.get_terminal_size()
+    border = "=" * width
+    output = border.center(width)
+    kwargs = {
+        "bot": bot,
+        "length": len(bot.guilds),
+        "discord": discord
+    }
+
+    for group in display_messages:
+        for i, message in enumerate(group):
+            message = message.format(**kwargs)
+            centered = message.center(width)
+            end = "\n" if i == 0 else "\n\n"
+            output += centered + end
+    output += border.center(width)
+    print(output)
+
+
+@bot.event
+async def on_ready():
+    log_channel = bot.get_channel(789892435190349859)
+
+    if log_channel:
+        embed = discord.Embed(
+            title=f"{bot.user.name} Is online!",
+            colour=discord.Colour.blurple()
+        )
+        embed.set_footer(text="Howdy' how ya'll doin'?",
+                         icon_url=bot.user.avatar_url)
+
+        await log_channel.send(embed=embed)
+
+
+@tasks.loop(minutes=2)
 async def change_status():
-	  await bot.change_presence(activity=discord.Game(next(status)))
-	        	
+    length = len(bot.guilds)
+    name = str.format(next(activities), length=length)
+
+    await bot.change_presence(activity=discord.Game(name=name))
+
+
+@change_status.before_loop
+async def before_change_status():
+    await bot.wait_until_ready()
+
+
 @bot.command(aliases=["src"])
 async def source(ctx):
-	embed = discord.Embed(colour = discord.Colour.blurple(), title = "Heres the source!", description="[Here!](https://github.com/FrostiiWeeb/PacMeSource/)")
-	embed.add_field(name="Leave a star, if u use my code!", value="Enjoy!")
-	await ctx.send(embed=embed)
+    embed = discord.Embed(
+        title="Heres the source!",
+        description="[Here!](https://github.com/FrostiiWeeb/PacMeSource/)",
+        colour=discord.Colour.blurple()
+    )
+    embed.add_field(name="Leave a star, if u use my code!", value="Enjoy!")
+    await ctx.send(embed=embed)
+
 
 @bot.command(aliases=['r'])
 @commands.is_owner()
 async def restart(ctx):
-	log_channel = bot.get_channel(789892435190349859)        	   
-	embed = discord.Embed(
-	colour = discord.Colour.blurple(),
-	title = f"{bot.user.name} Restarting!"
-	)    
-	embed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
-	embed.set_footer(text="Howdy! Ill be restarting in a few seconds.", icon_url=bot.user.avatar_url)	  
-	await log_channel.send(embed=embed)
-	await ctx.send(embed=embed)
-	await ctx.bot.logout()
+    log_channel = bot.get_channel(789892435190349859)
+    embed = discord.Embed(
+        title=f"{bot.user.name} Restarting!",
+        colour=discord.Colour.blurple()
+    )
+    embed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
+    embed.set_footer(text="Howdy! Ill be restarting in a few seconds.",
+                     icon_url=bot.user.avatar_url)
+    await log_channel.send(embed=embed)
+    await ctx.send(embed=embed)
+    await ctx.bot.logout()
+
 
 @bot.command(aliases=['cl'])
 async def changelog(ctx):
-	embed = discord.Embed(
-	colour = bot.colour,
-	title = "**Changelog:**",
-	description=f"```Added type racer command.```\n```Added Fun Cog.```"
-	)
-	await ctx.send(embed=embed)
+    embed = discord.Embed(
+        title="**Changelog:**",
+        description="```Added type racer command.```\n```Added Fun Cog.```",
+        colour=bot.colour
+    )
+    await ctx.send(embed=embed)
+
 
 os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
-
-os.environ["JISHAKU_NO_DM_TRACEBACK"] = "True" 
+os.environ["JISHAKU_NO_DM_TRACEBACK"] = "True"
 os.environ["JISHAKU_HIDE"] = "True"
-        	    						    						
-        	    						     						
-bot.load_extension('jishaku')   	    	    
-	   	                                 
-for filename in os.listdir('./cogs'):
-  if filename.endswith('.py') and not filename.startswith('_'):
-    bot.load_extension(f'cogs.{filename[:-3]}')
+bot.load_extension('jishaku')
 
-    
+bot.loop.create_task(handle_display())
+change_status.start()
+
+for filename in os.listdir('./cogs'):
+    if filename.endswith('.py') and not filename.startswith('_'):
+        bot.load_extension(f'cogs.{filename[:-3]}')
+
 load_dotenv()
-token = os.getenv('DISCORD_TOKEN')      
+token = os.getenv('DISCORD_TOKEN')
 bot.run(token)

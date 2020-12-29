@@ -31,6 +31,11 @@ class Error(commands.Cog):
         description: str = None
 
         if isinstance(error, tuple(self.errors.keys())):
+            reinvokable = (isinstance(error, commands.MissingPermissions) and
+                           await self.bot.is_owner(ctx.author))
+
+            if reinvokable:
+                return await ctx.reinvoke()
             description = str.format(self.errors[type(error)],
                                      ctx=ctx,
                                      error=error)
