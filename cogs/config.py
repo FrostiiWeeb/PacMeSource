@@ -23,8 +23,7 @@ class Config(commands.Cog, name="Configuration"):
                 json.dump(prefixes, f, indent=4)
 
     @commands.command()
-    @commands.check_any(commands.is_owner(),
-                        commands.has_permissions(administrator=True))
+    @commands.has_permissions(administrator=True)
     async def prefix(self, ctx, new_prefix):
         embed = discord.Embed(
             colour=discord.Colour.blurple(),
