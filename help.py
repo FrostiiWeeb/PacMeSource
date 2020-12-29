@@ -3,7 +3,6 @@ import sys
 import discord
 import asyncio
 from discord.ext import commands
-from disputils import BotEmbedPaginator, BotConfirmation, BotMultipleChoice
 
 class Help(commands.Cog):
 	
