@@ -55,7 +55,7 @@ bot.launch_time = datetime.utcnow()
 
 bot.owner_ids = {746807014658801704, 668906205799907348}
 
-bot.version = "1.1.0"
+bot.version = "1.3.0"
 
 bot.colour = discord.Colour.red()
 
@@ -162,7 +162,7 @@ async def changelog(ctx):
     await ctx.send(embed=embed)
 
 
-os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
+os.environ["JISHAKU_NO_UNDERSCORE"] = "False"
 os.environ["JISHAKU_NO_DM_TRACEBACK"] = "True"
 os.environ["JISHAKU_HIDE"] = "True"
 bot.load_extension('jishaku')
