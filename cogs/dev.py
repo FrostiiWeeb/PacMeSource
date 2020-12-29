@@ -23,7 +23,7 @@ class Develepor(commands.Cog):
         start = time.perf_counter()
 
         embed = discord.Embed(title = f"Screenshot of {url}", color = discord.Color.from_rgb(48,162,242))
-        async with aiohttp.botSession() as cs:
+        async with aiohttp.ClientSession() as cs:
             async with cs.get(f'https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{url}') as r:
                 res = await r.read()
                 embed.set_image(url="attachment://pp.png")
