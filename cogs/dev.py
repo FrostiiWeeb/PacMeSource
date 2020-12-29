@@ -8,7 +8,7 @@ import discord
 from discord.ext import commands
 
 
-class Develepor(commands.Cog):
+class Developer(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -40,4 +40,4 @@ class Develepor(commands.Cog):
         await ctx.send(f"{days}d, {hours}h, {minutes}m")
 
 def setup(bot):
-    bot.add_cog(Develepor(bot))
+    bot.add_cog(Developer(bot))
