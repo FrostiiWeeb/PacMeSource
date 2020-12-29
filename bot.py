@@ -67,35 +67,34 @@ activities = cycle(["Commands: !*help",
                     "{length} servers! | !*help",
                     "PacMan"])
 display_messages = (
-    ("Bot is now online!",),
+    ("Bot is now online!", ""),
     ("Logged in as:", "{bot.user}"),
     ("ID:", "{bot.user.id}"),
     ("Working on:", "{length} servers!"),
-    ("My prefix is:", "{prefix}"),
-    ("Version:", "{discord.__version__}")
+    ("My prefix is:", default_prefix),
+    ("Version:", discord.__version__)
 )
 
 
 async def handle_display():
     await bot.wait_until_ready()
     # DEV: there were 30 spaces originally
-    border = "=" * 48
     width, _ = os.get_terminal_size()
+    border = "=" * width
     output = border.center(width)
     kwargs = {
         "bot": bot,
         "length": len(bot.guilds),
-        "prefix": default_prefix,
         "discord": discord
     }
-    print(border.center(width))
 
     for group in display_messages:
         for i, message in enumerate(group):
             message = message.format(**kwargs)
             centered = message.center(width)
-            end = "\n" if i + 1 == len(group) else "\n\n"
+            end = "\n" if i == 0 else "\n\n"
             output += centered + end
+    output += border.center(width)
     print(output)
 
 
@@ -117,9 +116,9 @@ async def on_ready():
 @tasks.loop(minutes=2)
 async def change_status():
     length = len(bot.guilds)
-    activity = str.format(next(activities), length=length)
+    name = str.format(next(activities), length=length)
 
-    await bot.change_presence(activity=activity)
+    await bot.change_presence(activity=discord.Game(name=name))
 
 
 @change_status.before_loop
