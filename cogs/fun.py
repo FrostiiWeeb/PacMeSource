@@ -3,6 +3,7 @@ import random
 import time
 import aiohttp
 import discord
+import re
 from discord.ext import commands
 
 
