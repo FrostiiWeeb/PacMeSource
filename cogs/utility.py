@@ -47,7 +47,7 @@ class Utility(commands.Cog):
          embed.add_field(name="Role Count:", value=f"{len(guild.roles)}")
          embed.add_field(name="Booster Count:", value=f"{guild.premium_subscription_count}")
          embed.add_field(name="Member Count:", value=f"{guild.member_count}")
-         embed.add_field(name="Server Created At:", value=guild.created_at.strftime("%a, %, %d %B %Y, %I:%M %p UTC"))
+         embed.add_field(name="Server Created At:", value=guild.created_at.strftime("%a, %d %b %Y %I:%M %p UTC"))
          embed.add_field(name="Owner", value=f"{guild.owner}")
          embed.set_author(name=f"{guild} | ID: {guild.id}", icon_url="")
          embed.set_footer(text=f"Requested by {ctx.author}.", icon_url=f"{ctx.author.avatar_url}")
