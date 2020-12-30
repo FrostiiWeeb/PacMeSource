@@ -93,17 +93,7 @@ class Fun(commands.Cog):
                     )
             await ctx.send(embed=embed)
     
-    @commands.command(aliases=["yt"])
-    async def youtube(self, ctx, *, search):
-	     BASE = "https://youtube.com/results"
-	     p = {"search_query": search}
-	     # Spoof a user agent header or the request will immediately fail
-	     h = {"User-Agent": "Mozilla/5.0"}
-	     async with aiohttp.ClientSession() as client:
-	             async with client.get(BASE, params=p, headers=h) as resp:
-	             	dom = await resp.text()
-	             	found = re.findall(r'href"\/watch\?v=([a-zA-Z0-9_-]{11})', dom)
-	             	return await ctx.send(f"https://youtu.be/{found[0]}")
+
 
 def setup(bot):
     bot.add_cog(Fun(bot))
