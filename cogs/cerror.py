@@ -18,7 +18,8 @@ class Error(commands.Cog):
             commands.NSFWChannelRequired: "{ctx.command} Is required to be "
                                           "invoked in a NSFW channel.",
             commands.MaxConcurrencyReached: "{ctx.command} Is already being "
-                                            "used, please wait."
+                                            "used, please wait.",
+            commands.DisabledCommand: "{ctx.command} has been disabled, please wait until it's enabled."
         }
 
     @commands.Cog.listener()
