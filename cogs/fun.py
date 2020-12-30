@@ -95,7 +95,7 @@ class Fun(commands.Cog):
     BASE = "https://youtube.com/results"
     
     @commands.command(aliases=["yt"])
-    async def youtube(ctx, *, search):
+    async def youtube(self, ctx, *, search):
      p = {"search_query": search}
      # Spoof a user agent header or the request will immediately fail
      h = {"User-Agent": "Mozilla/5.0"}
