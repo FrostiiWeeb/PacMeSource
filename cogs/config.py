@@ -1,4 +1,5 @@
 from discord.ext import commands
+import ast
 
 
 def insert_returns(body):
