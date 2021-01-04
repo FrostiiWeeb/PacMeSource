@@ -12,12 +12,12 @@ class Error(commands.Cog):
         self.errors = {
             commands.MissingRequiredArgument: "Missing required argument(s): "
                                               "{error.param}",
-            commands.MissingPermissions: "Missing permission(s).",
+            commands.MissingPermissions: "Missing permission(s):\n{error.param}",
             commands.CommandNotFound: "The command you provided is invalid.",
             commands.NotOwner: "You don't own this bot.",
-            commands.NSFWChannelRequired: "{ctx.command} Is required to be "
+            commands.NSFWChannelRequired: "{ctx.command} is required to be "
                                           "invoked in a NSFW channel.",
-            commands.MaxConcurrencyReached: "{ctx.command} Is already being "
+            commands.MaxConcurrencyReached: "{ctx.command} is already being "
                                             "used, please wait.",
             commands.DisabledCommand: "{ctx.command} has been disabled, please wait until it's enabled."
         }
