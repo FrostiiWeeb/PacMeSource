@@ -89,7 +89,11 @@ class Moderation(commands.Cog):
             embed.add_field(name=f"**{name}**:", value=value, inline=False)
 
         if isinstance(member, discord.Member):
-            await member.send(embed=embed)
+            try:
+                await ctx.guild.ban(member)
+                await member.send(embed=embed)
+            except commands.MissingPermissions:
+                pass
         else:
             member = discord.Object(member)
         await ctx.guild.ban(member)
