@@ -12,7 +12,7 @@ class Error(commands.Cog):
         self.errors = {
             commands.MissingRequiredArgument: "Missing required argument(s): "
                                               "{error.param}",
-            commands.MissingPermissions: "Missing permission(s):\n{error.param}",
+            commands.MissingPermissions: "Missing permission(s).",
             commands.CommandNotFound: "The command you provided is invalid.",
             commands.NotOwner: "You don't own this bot.",
             commands.NSFWChannelRequired: "{ctx.command} is required to be "
