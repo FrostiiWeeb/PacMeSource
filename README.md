@@ -1,6 +1,6 @@
 # **PacMe**
 
-# A multi-purpose bot with Fun commands, Moderation, and more!
+# ` A multi-purpose bot with Fun commands, Moderation, and more!`
 
 # **Info:**
 
